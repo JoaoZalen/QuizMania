@@ -457,7 +457,11 @@ export function gerar() {
   const tabelas = perguntasDeTabelas({ pega, embaralha, int });
   const usadas = new Set(); // nenhuma pergunta aparece em dois quizzes
   const unicas = linhas => linhas.filter(l => !usadas.has(l[0]) && usadas.add(l[0]));
-  const movimentos = chave => embaralha([...(MIDIAS.videos[chave] || []), ...(MIDIAS.gifs[chave] || [])]);
+  const todosMov = [...Object.values(MIDIAS.videos).flat(), ...Object.values(MIDIAS.gifs).flat()];
+  const movimentos = chave => {
+    const doTema = [...(MIDIAS.videos[chave] || []), ...(MIDIAS.gifs[chave] || [])];
+    return embaralha(doTema.length >= 2 ? doTema : [...doTema, ...todosMov]);
+  };
   const quizzes = [];
   let n = 0;
 
