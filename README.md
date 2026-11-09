@@ -78,3 +78,43 @@ Funções em `src/utils/midia.js`; campo do editor em `components/criar/CampoMid
 As capas vêm do Wikimedia Commons (licenças livres). O crédito de cada foto aparece
 na página do quiz, como a licença exige. Fotos enviadas por usuários ficam salvas no
 navegador (reduzidas para caber no `localStorage`).
+
+## Contexto do projeto
+
+### Objetivo
+Site de quizzes no estilo Quizur, rodando no XAMPP (`htdocs/quizmania`). O público cria
+conta com nome de usuário, monta os próprios quizzes, joga os quizzes dos outros e coloca
+mídia em cada pergunta. Por enquanto é só o front-end funcional; depois o projeto vai para
+**Vue** com um back-end separado acessado por **API**.
+
+### Funcionalidades
+- Dois tipos de quiz: **personalidade** ("qual herói você seria?", cada resposta conta ponto
+  para um resultado) e **certo ou errado** (nota no final).
+- Criador de quiz com capa, resultados com foto, 2 a 6 respostas por pergunta e mídia por
+  pergunta (imagem, GIF, YouTube ou vídeo).
+- Perfil público, edição de perfil (nome, bio, avatar com iniciais ou foto) e histórico.
+- Home com carrossel dos mais jogados, categorias, busca no header, filtro por tipo,
+  ordenação e paginação de 50 quizzes por página.
+- Tela do quiz em "modo foco": conteúdo no meio da tela e sem rodapé.
+- ~100 quizzes de exemplo de 24 autores, com quantidade de perguntas variada e
+  **nenhuma pergunta repetida entre quizzes**.
+
+### Decisões de design (e por quê)
+- **Sem emojis** e sem visual genérico (gradiente roxo, slogans vazios).
+- Primeiro foram testadas ilustrações cartoon; ficou **infantil demais**. A troca foi para
+  **fotos reais** (Wikimedia Commons), avatares com iniciais e visual mais editorial.
+- Tipografia: *Bricolage Grotesque* (títulos) + *DM Sans* (texto). Fundo off-white,
+  preto como cor principal e violeta `#4f3cf0` só como destaque. Bordas finas, sem
+  sombras "3D".
+- Layout fluido que ocupa a largura toda da tela (margem lateral proporcional).
+- Referência de energia visual: Kahoot (cores fortes nas respostas), mas sem copiar a marca.
+
+### Organização do código
+Separado por tela e por função, imitando um projeto Vue (ver **Estrutura** acima), para que
+cada arquivo de `views/` e `components/` vire um `.vue` na migração e o `services/api.js`
+seja o único ponto a trocar por chamadas HTTP.
+
+### Próximos passos
+- Migrar para Vue (Vite + vue-router + Pinia) reaproveitando views, componentes e CSS.
+- Criar o back-end com API (contas com senha criptografada, quizzes, jogadas, upload de mídia).
+- Guardar as mídias enviadas no servidor em vez do `localStorage`.
