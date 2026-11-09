@@ -114,6 +114,30 @@ Separado por tela e por função, imitando um projeto Vue (ver **Estrutura** aci
 cada arquivo de `views/` e `components/` vire um `.vue` na migração e o `services/api.js`
 seja o único ponto a trocar por chamadas HTTP.
 
+### Regras do projeto (combinadas durante o desenvolvimento)
+- **Nunca usar emoji** como imagem ou decoração; usar fotos/imagens de verdade.
+- **Nada de visual genérico**: sem gradiente roxo, sem slogan vazio, sem mensagens tipo
+  "Mandou bem!". Textos diretos e específicos.
+- **Nada infantil**: sem carinhas em objetos, sem botões "3D" gordinhos, sem fonte arredondada.
+- **Back-end fica para depois**: o front só precisa funcionar com `localStorage`; a troca
+  será feita no `services/api.js` quando o projeto for para Vue + API.
+- **Código separado por tela e função**, já na estrutura de um projeto Vue.
+- **Commits só com a conta JoaoZalen** (`joaozplays2@gmail.com`), sem linhas de coautoria.
+- Para testar sem Apache: `python -m http.server 5180 --directory C:/xampp/htdocs/quizmania`
+  e abrir `http://localhost:5180`.
+
+### Linha do tempo
+1. Primeiro protótipo (HTML/CSS/JS num arquivo só), visual minimalista.
+2. Pedido de imagens de verdade em vez de emoji → ilustrações cartoon em SVG, dois tipos de
+   quiz e perfil do usuário. Referência visual: página do Kahoot.
+3. Remoção de tudo com cara de "gerado": textos e cores mais diretos.
+4. Header, footer, carrossel e ~100 quizzes de exemplo com autores e tamanhos variados.
+5. "Está infantil" → tipografia e paleta mais sóbrias, sem carinhas; layout ocupando a tela toda.
+6. Ainda infantil → troca dos desenhos por **fotos reais** (Wikimedia Commons) e avatares com iniciais.
+7. Código separado em arquivos por tela/função na estrutura do Vue.
+8. Paginação de 50 por página, rodapé refeito, tela do quiz centralizada (modo foco).
+9. Mídia nas perguntas (imagem, GIF, YouTube, vídeo) e perguntas únicas em todos os quizzes.
+
 ### Próximos passos
 - Migrar para Vue (Vite + vue-router + Pinia) reaproveitando views, componentes e CSS.
 - Criar o back-end com API (contas com senha criptografada, quizzes, jogadas, upload de mídia).
