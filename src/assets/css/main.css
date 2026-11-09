@@ -1,0 +1,13 @@
+/* Arquivo de entrada dos estilos. Cada componente/tela tem o seu arquivo. */
+@import url('base.css');
+@import url('components/cabecalho.css');
+@import url('components/rodape.css');
+@import url('components/card-quiz.css');
+@import url('components/carrossel.css');
+@import url('components/categorias.css');
+@import url('components/lateral.css');
+@import url('views/home.css');
+@import url('views/entrar.css');
+@import url('views/criar-quiz.css');
+@import url('views/quiz.css');
+@import url('views/perfil.css');

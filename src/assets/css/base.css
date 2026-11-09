@@ -1,0 +1,92 @@
+/* Variáveis, reset, tipografia, botões, campos e utilitários */
+:root {
+  --fundo: #f7f6f3;
+  --papel: #ffffff;
+  --tinta: #141414;
+  --tinta-2: #2a2a2a;
+  --suave: #6f6f6f;
+  --linha: #e7e5e0;
+  --linha-forte: #d6d3cc;
+  --acento: #4f3cf0;
+  --acento-esc: #3a29c9;
+  --acento-claro: #efedff;
+  --verde: #1f9d55;
+  --vermelho: #e0443e;
+  --c0: #e0443e; --c1: #2f6fde; --c2: #f0b400; --c3: #1f9d55; --c4: #7c4ddb; --c5: #f2701c;
+  --raio: 14px;
+  --sombra: 0 1px 2px rgba(20,20,20,.04), 0 8px 24px rgba(20,20,20,.07);
+  --titulo: 'Bricolage Grotesque', 'DM Sans', system-ui, sans-serif;
+  --lateral: clamp(16px, 3vw, 56px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 88px; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--fundo); color: var(--tinta); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font: inherit; }
+h1, h2, h3, h4 { font-family: var(--titulo); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+.container { width: 100%; max-width: 2200px; margin: 0 auto; padding: 0 var(--lateral); }
+#conteudo { flex: 1; padding-top: 28px; padding-bottom: 80px; }
+.sobretitulo { font-size: 13px; font-weight: 600; color: var(--suave); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+
+/* botões */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background .15s, border-color .15s, color .15s, transform .1s; white-space: nowrap; }
+.btn:active { transform: scale(.98); }
+.btn-primario { background: var(--tinta); color: #fff; }
+.btn-primario:hover { background: var(--acento); }
+.btn-sec { background: var(--papel); color: var(--tinta); border-color: var(--linha-forte); }
+.btn-sec:hover { border-color: var(--tinta); }
+.btn-branco { background: #fff; color: var(--tinta); }
+.btn-branco:hover { background: var(--acento); color: #fff; }
+.btn-mini { padding: 6px 12px; font-size: 13px; border-radius: 8px; background: transparent; color: var(--tinta); border-color: var(--linha-forte); }
+.btn-mini:hover { border-color: var(--tinta); }
+.btn-perigo { color: var(--vermelho); border-color: #f2cfcd; }
+.btn-perigo:hover { border-color: var(--vermelho); background: #fdf1f0; }
+.btn-bloco { width: 100%; padding: 12px; }
+.btn-grande { padding: 13px 26px; font-size: 15px; }
+
+/* campos */
+.campo { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.campo label { font-size: 13px; font-weight: 600; color: var(--tinta-2); }
+.campo small { color: var(--suave); font-size: 12px; }
+input, textarea, select { font: inherit; font-size: 15px; padding: 10px 14px; border: 1px solid var(--linha-forte); border-radius: 10px; background: var(--papel); color: var(--tinta); outline: none; width: 100%; transition: border-color .15s, box-shadow .15s; }
+input:focus, textarea:focus, select:focus { border-color: var(--acento); box-shadow: 0 0 0 3px var(--acento-claro); }
+textarea { resize: vertical; }
+select { cursor: pointer; }
+
+/* selo de tipo de quiz */
+.selo { position: absolute; left: 10px; top: 10px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 6px; background: rgba(255,255,255,.92); color: var(--tinta); backdrop-filter: blur(4px); }
+.selo::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; background: var(--verde); }
+.selo.personalidade::before { background: var(--acento); }
+.selo.estatico { position: static; display: inline-block; margin-bottom: 12px; background: var(--papel); border: 1px solid var(--linha); }
+
+/* blocos genéricos */
+.secao { margin-bottom: 56px; }
+.secao-cab { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.secao-cab h2 { font-size: 26px; }
+.secao-titulo { font-size: 22px; margin: 32px 0 14px; }
+.secao-titulo small { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--suave); font-weight: 400; margin-left: 8px; letter-spacing: 0; }
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.vazio { color: var(--suave); padding: 48px 0; text-align: center; grid-column: 1 / -1; }
+.vazio a { color: var(--acento); font-weight: 600; }
+.vazio-grande { text-align: center; padding: 64px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.vazio-grande h1 { font-size: 40px; }
+.vazio-grande p { color: var(--suave); }
+.painel { background: var(--papel); border: 1px solid var(--linha); border-radius: var(--raio); padding: 20px; margin-bottom: 14px; }
+.acoes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.acoes-fim { justify-content: flex-end; }
+.abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--fundo); border-radius: 10px; padding: 4px; margin-bottom: 24px; border: 1px solid var(--linha); }
+.aba { padding: 8px; border: 0; background: none; border-radius: 7px; font-weight: 600; color: var(--suave); cursor: pointer; text-align: center; }
+.aba.ativo { background: var(--papel); color: var(--tinta); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.credito { font-size: 11px; color: var(--suave); margin-top: 8px; }
+.credito a { text-decoration: underline; text-underline-offset: 2px; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 16px); background: var(--tinta); color: #fff; padding: 11px 18px; border-radius: 10px; font-weight: 500; font-size: 14px; opacity: 0; pointer-events: none; transition: .2s; z-index: 50; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 760px) {
+  #conteudo { padding-top: 16px; }
+  .esconde-mobile { display: none; }
+}

@@ -1,0 +1,29 @@
+.home-colunas { display: grid; grid-template-columns: 1fr 340px; gap: 40px; align-items: start; }
+.home-colunas .grade { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.secao-cab .sobretitulo { margin-bottom: 4px; }
+
+/* barra de filtros da lista */
+.barra-filtros { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0 18px; margin-bottom: 4px; }
+.segmentado { display: inline-flex; background: var(--papel); border: 1px solid var(--linha); border-radius: 10px; padding: 3px; }
+.segmentado button { border: 0; background: none; padding: 7px 14px; border-radius: 7px; font-size: 14px; font-weight: 500; color: var(--suave); cursor: pointer; transition: background .15s, color .15s; }
+.segmentado button:hover { color: var(--tinta); }
+.segmentado button.ativo { background: var(--tinta); color: #fff; }
+.ordenar { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--suave); }
+.ordenar select { width: auto; font-size: 14px; padding: 7px 12px; color: var(--tinta); }
+
+/* paginação */
+.paginacao { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--linha); }
+.pag-numeros { display: flex; gap: 4px; align-items: center; }
+.paginacao button { min-width: 38px; height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid transparent; background: none; font-weight: 500; font-size: 14px; color: var(--tinta-2); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-variant-numeric: tabular-nums; transition: background .15s, border-color .15s; }
+.paginacao button:hover:not(:disabled) { background: var(--papel); border-color: var(--linha-forte); }
+.paginacao button.ativo { background: var(--tinta); color: #fff; }
+.paginacao .pag-seta { border-color: var(--linha-forte); background: var(--papel); }
+.paginacao button:disabled { opacity: .35; cursor: default; }
+.pag-reticencias { color: var(--suave); padding: 0 4px; }
+
+@media (max-width: 1100px) { .home-colunas { grid-template-columns: 1fr; } }
+@media (max-width: 760px) {
+  .pag-seta span { display: none; }
+  .segmentado { width: 100%; }
+  .segmentado button { flex: 1; padding: 7px 6px; }
+}

@@ -1,0 +1,21 @@
+/* Coluna lateral da home: ranking e chamada para criar */
+.lateral { position: sticky; top: 92px; display: flex; flex-direction: column; gap: 16px; }
+.bloco-lateral { background: var(--papel); border: 1px solid var(--linha); border-radius: 16px; padding: 20px; }
+.bloco-lateral h3 { font-size: 17px; margin-bottom: 12px; }
+.ranking { list-style: none; display: flex; flex-direction: column; }
+.ranking li { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px solid var(--linha); }
+.ranking li:last-child { border-bottom: 0; }
+.ranking .pos { width: 18px; font-weight: 600; color: var(--suave); text-align: center; font-variant-numeric: tabular-nums; font-size: 13px; }
+.ranking a { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ranking a:hover b { color: var(--acento); }
+.ranking img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.ranking a span { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.ranking b { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ranking small { color: var(--suave); font-size: 12px; }
+.ranking em { font-style: normal; font-size: 12px; color: var(--suave); font-variant-numeric: tabular-nums; }
+.bloco-criar { color: #fff; border: 0; min-height: 240px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(0deg, rgba(20,20,20,.9) 20%, rgba(20,20,20,.2)), var(--foto) center / cover, var(--tinta); }
+.bloco-criar h3 { font-size: 24px; margin-bottom: 6px; }
+.bloco-criar p { color: rgba(255,255,255,.8); font-size: 14px; margin-bottom: 18px; }
+
+@media (max-width: 1100px) { .lateral { position: static; display: grid; grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { .lateral { grid-template-columns: 1fr; } }

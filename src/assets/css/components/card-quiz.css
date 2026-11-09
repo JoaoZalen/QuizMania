@@ -1,0 +1,16 @@
+.card { background: var(--papel); border-radius: var(--raio); overflow: hidden; border: 1px solid var(--linha); display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+.card:hover { transform: translateY(-2px); box-shadow: var(--sombra); }
+.card-capa { position: relative; aspect-ratio: 16/10; background: var(--linha); overflow: hidden; }
+.card-capa img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+.card:hover .card-capa img { transform: scale(1.04); }
+.card-corpo { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.card-cat { font-size: 12px; color: var(--suave); }
+.card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.015em; line-height: 1.3; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+.card h3:hover { color: var(--acento); }
+.meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; font-size: 13px; color: var(--suave); }
+.autor { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.autor:hover { color: var(--tinta); }
+.autor img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+.jogadas { display: flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+.card-dono { display: flex; gap: 6px; margin-top: 8px; }
+.card-dono .btn:first-child { flex: 1; }

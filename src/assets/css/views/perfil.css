@@ -1,0 +1,29 @@
+.perfil { background: var(--papel); border: 1px solid var(--linha); border-radius: 18px; overflow: hidden; margin-bottom: 24px; }
+.perfil-faixa { height: 160px; background: var(--tinta); background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); background-size: 16px 16px; }
+.perfil-cab { display: flex; gap: 24px; align-items: flex-start; padding: 0 32px; margin-top: -52px; flex-wrap: wrap; }
+.perfil-nome, .perfil-acoes { padding-top: 62px; }
+.perfil-avatar { width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--papel); object-fit: cover; background: var(--papel); }
+.perfil-nome { flex: 1; min-width: 200px; padding-bottom: 6px; }
+.perfil-nome h1 { font-size: 32px; letter-spacing: -.035em; }
+.perfil-nome span { color: var(--suave); font-size: 14px; }
+.perfil-nome p { margin-top: 8px; max-width: 560px; }
+.perfil-nome .apagado { color: var(--suave); font-style: italic; }
+.perfil-acoes { display: flex; gap: 8px; align-items: center; padding-bottom: 10px; }
+.numeros { display: flex; gap: 48px; padding: 20px 32px 26px; }
+.numeros b { font-family: var(--titulo); font-size: 28px; font-weight: 700; display: block; line-height: 1.1; }
+.numeros span { color: var(--suave); font-size: 13px; }
+.abas-linha { display: flex; gap: 4px; background: none; padding: 0; border: 0; border-bottom: 1px solid var(--linha); border-radius: 0; margin-bottom: 20px; }
+.abas-linha .aba { border-radius: 0; padding: 10px 14px; margin-bottom: -1px; border-bottom: 2px solid transparent; box-shadow: none; background: none; }
+.abas-linha .aba.ativo { border-color: var(--tinta); color: var(--tinta); box-shadow: none; }
+.historico { list-style: none; display: grid; gap: 8px; }
+.historico a { display: flex; align-items: center; gap: 14px; background: var(--papel); border: 1px solid var(--linha); border-radius: 12px; padding: 10px; transition: border-color .15s; }
+.historico a:hover { border-color: var(--linha-forte); }
+.historico img { width: 72px; height: 46px; border-radius: 8px; object-fit: cover; }
+.historico span { flex: 1; display: flex; flex-direction: column; }
+.historico small { color: var(--suave); }
+.historico em { font-style: normal; font-weight: 600; background: var(--fundo); border: 1px solid var(--linha); padding: 4px 12px; border-radius: 8px; }
+
+@media (max-width: 760px) {
+  .perfil-cab { padding: 0 20px; }
+  .numeros { gap: 24px; flex-wrap: wrap; padding: 16px 20px 22px; }
+}
