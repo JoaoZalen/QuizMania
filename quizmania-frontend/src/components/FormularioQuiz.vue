@@ -13,6 +13,9 @@
           <option v-for="categoria in categorias" :key="categoria" :value="categoria">{{ categoria }}</option>
         </select>
 
+        <label>Imagem do quiz:</label>
+        <CampoArquivo v-model="quiz.imagem" tipo="imagem" />
+
         <div class="acoes">
           <button type="submit" class="btn btn-primario">{{ id ? 'Salvar alterações' : 'Cadastrar' }}</button>
           <router-link to="/quizzes" class="btn">Cancelar</router-link>
@@ -24,10 +27,12 @@
 
 <script>
     //Importando instancia do axios (Centralizado no arquivo axiosInstance.js)
-    import axiosInstance from "../services/axiosInstance";
+    import axiosInstance, { sessao } from "../services/axiosInstance";
+    import CampoArquivo from "./CampoArquivo.vue";
 
     export default {
         name: "FormularioQuiz",
+        components: { CampoArquivo },
         props: {
             //ID do quiz. Sem ID o formulário cadastra; com ID ele edita
             id: {
@@ -41,6 +46,7 @@
                     titulo: "",
                     descricao: "",
                     categoria: "",
+                    imagem: "",
                 },
                 categorias: [
                     "Conhecimentos gerais", "Ciências", "História", "Games",
@@ -62,6 +68,11 @@
                     this.quiz.titulo = response.data.titulo;
                     this.quiz.descricao = response.data.descricao;
                     this.quiz.categoria = response.data.categoria;
+                    this.quiz.imagem = response.data.imagem || "";
+                    //Só o autor pode editar o quiz
+                    if (response.data.usuario_id !== sessao.usuario.id) {
+                        this.$router.push(`/quizzes/${this.id}/jogar`);
+                    }
                 } catch (error) {
                     this.mostrarErro("Erro ao carregar quiz", error);
                 }
@@ -69,7 +80,8 @@
             async salvarQuiz() { //Método chamado ao enviar os dados do formulário
                 try {
                     if (this.id) {
-                        await axiosInstance.put(`/quizzes/${this.id}`, this.quiz); //Envia requisição PUT
+                        const response = await axiosInstance.put(`/quizzes/${this.id}`, this.quiz); //Envia requisição PUT
+                        this.quiz.imagem = response.data.imagem || "";
                         this.erro = false;
                         this.mensagem = `Quiz ${this.quiz.titulo} atualizado com sucesso!`;
                     } else {

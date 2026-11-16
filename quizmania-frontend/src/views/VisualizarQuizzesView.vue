@@ -55,7 +55,7 @@
                     await this.getQuizzes(); //Recarrega a lista
                 } catch (error){
                     this.erro = true;
-                    this.mensagem = `Erro ao excluir quiz: ${error.message}`;
+                    this.mensagem = `Erro ao excluir quiz: ${error.response ? error.response.data.message : error.message}`;
                 }
             } //Fim excluirQuiz
         }

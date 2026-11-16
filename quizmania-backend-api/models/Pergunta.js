@@ -2,7 +2,7 @@ import { pool } from '../config/db.js';
 
 class Pergunta{
 
-    constructor(quiz_id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta){
+    constructor(quiz_id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta, midia_tipo, midia_url){
         this.quiz_id = quiz_id;
         this.enunciado = enunciado;
         this.alternativa_a = alternativa_a;
@@ -10,15 +10,17 @@ class Pergunta{
         this.alternativa_c = alternativa_c;
         this.alternativa_d = alternativa_d;
         this.correta = correta; //Letra da alternativa certa: A, B, C ou D
+        this.midia_tipo = midia_tipo; //'imagem', 'video' ou null (sem mídia)
+        this.midia_url = midia_url;
     }
 
     async save(){
         const [resultado] = await pool.query(
             `INSERT INTO perguntas
-             (quiz_id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+             (quiz_id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta, midia_tipo, midia_url)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [this.quiz_id, this.enunciado, this.alternativa_a, this.alternativa_b,
-             this.alternativa_c, this.alternativa_d, this.correta]
+             this.alternativa_c, this.alternativa_d, this.correta, this.midia_tipo, this.midia_url]
         );
 
         this.id = resultado.insertId; //ID gerado pelo banco
@@ -35,12 +37,13 @@ class Pergunta{
         return linhas[0]; //undefined se não encontrar
     }
 
-    static async update(id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta){
+    static async update(id, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta, midia_tipo, midia_url){
         const [resultado] = await pool.query(
             `UPDATE perguntas
-             SET enunciado = ?, alternativa_a = ?, alternativa_b = ?, alternativa_c = ?, alternativa_d = ?, correta = ?
+             SET enunciado = ?, alternativa_a = ?, alternativa_b = ?, alternativa_c = ?, alternativa_d = ?, correta = ?,
+                 midia_tipo = ?, midia_url = ?
              WHERE id = ?`,
-            [enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta, id]
+            [enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, correta, midia_tipo, midia_url, id]
         );
         return resultado;
     }

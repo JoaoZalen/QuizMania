@@ -4,7 +4,7 @@ import {
     urlencodedMiddleware, jsonMiddleware,
     securityMiddleware, compressionMiddlewware,
     rateLimitMiddleware, morganMiddleware,
-    corsMiddleware
+    corsMiddleware, uploadsMiddleware
 } from './middlewares/middlewares.js';
 import router from './routes/routes.js';
 import connectBD from './config/db.js';
@@ -26,6 +26,7 @@ app.use(compressionMiddlewware);
 //app.use(rateLimitMiddleware);
 app.use(morganMiddleware);
 app.use(corsMiddleware);
+app.use('/uploads', uploadsMiddleware);
 
 //Registrando rotas (endpoints)
 app.use(router);

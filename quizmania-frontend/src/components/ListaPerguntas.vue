@@ -1,6 +1,8 @@
 <template>
     <div class="pergunta-card" v-for="(pergunta, index) in perguntas" :key="pergunta.id">
         <h3>{{ index + 1 }}. {{ pergunta.enunciado }}</h3>
+        <video v-if="pergunta.midia_tipo === 'video'" class="midia" :src="urlArquivo(pergunta.midia_url)" controls preload="metadata"></video>
+        <img v-else-if="pergunta.midia_tipo === 'imagem'" class="midia" :src="urlArquivo(pergunta.midia_url)" alt="" />
 
         <ul>
             <li :class="{ correta: pergunta.correta === 'A' }">A) {{ pergunta.alternativa_a }}</li>
@@ -18,8 +20,11 @@
 </template>
 
 <script>
+    import { urlArquivo } from "../services/axiosInstance";
+
     export default {
         name: 'ListaPerguntas',
+        methods: { urlArquivo },
         props: {
             perguntas: {
                 type: Array,
@@ -36,6 +41,10 @@
         border: 1px solid #e7e5e0;
         border-radius: 12px;
         padding: 20px;
+    }
+
+    .pergunta-card .midia {
+        max-height: 220px;
     }
 
     .pergunta-card h3 {

@@ -5,6 +5,18 @@
         <router-link to="/">Home</router-link>
         <router-link to="/quizzes">Visualizar Quizzes</router-link>
         <router-link to="/cadastrar">Cadastrar Quiz</router-link>
+        <!--Logado: foto, nome e sair. Sem login: entrar e criar conta-->
+        <template v-if="sessao.usuario">
+          <router-link to="/conta" class="usuario-logado">
+            <FotoUsuario :nome="sessao.usuario.nome" :foto="sessao.usuario.foto || ''" :tamanho="26" />
+            {{ sessao.usuario.nome }}
+          </router-link>
+          <a href="#" @click.prevent="logout">Sair</a>
+        </template>
+        <template v-else>
+          <router-link to="/entrar">Entrar</router-link>
+          <router-link to="/criar-conta">Criar conta</router-link>
+        </template>
       </nav>
     </header>
 
@@ -12,6 +24,31 @@
       <router-view/>
     </main>
 </template>
+
+<script>
+    import FotoUsuario from './components/FotoUsuario.vue'
+    //Importando instancia do axios (Centralizado no arquivo axiosInstance.js)
+    import axiosInstance, { sessao, sair } from './services/axiosInstance'
+
+    export default {
+        name: 'App',
+        components: { FotoUsuario },
+        data() {
+            return { sessao } //Usuário logado (reativo)
+        },
+        methods: {
+            async logout() {
+                try {
+                    await axiosInstance.post('/logout'); //Invalida o token na API
+                } catch (error) {
+                    //Mesmo com erro, sai localmente
+                }
+                sair();
+                this.$router.push('/');
+            }
+        }
+    }
+</script>
 
 <style>
     .cabecalho {
@@ -45,6 +82,12 @@
       text-decoration: none;
       padding: 8px 12px;
       border-radius: 8px;
+    }
+
+    .usuario-logado {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     nav a:hover {

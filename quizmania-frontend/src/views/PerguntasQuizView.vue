@@ -34,6 +34,14 @@
             <label for="alternativa_d">Alternativa D:</label>
             <input type="text" id="alternativa_d" v-model="pergunta.alternativa_d" maxlength="150" required />
 
+            <label for="midia_tipo">Mídia da pergunta:</label>
+            <select id="midia_tipo" v-model="pergunta.midia_tipo" @change="pergunta.midia_url = ''">
+                <option value="">Sem mídia</option>
+                <option value="imagem">Imagem</option>
+                <option value="video">Vídeo</option>
+            </select>
+            <CampoArquivo v-if="pergunta.midia_tipo" v-model="pergunta.midia_url" :tipo="pergunta.midia_tipo" />
+
             <label for="correta">Alternativa correta:</label>
             <select id="correta" v-model="pergunta.correta" required>
                 <option value="A">A</option>
@@ -43,7 +51,7 @@
             </select>
 
             <div class="acoes">
-                <button type="submit" class="btn btn-primario">{{ idEditando ? 'Salvar alterações' : 'Cadastrar pergunta' }}</button>
+                <button type="submit" class="btn btn-primario" :disabled="enviando">{{ idEditando ? 'Salvar alterações' : 'Cadastrar pergunta' }}</button>
                 <button type="button" class="btn" v-if="idEditando" @click="limparFormulario">Cancelar edição</button>
             </div>
         </form>
@@ -54,13 +62,15 @@
 <script>
     //Caminho relativo para o componente
     import ListaPerguntas from '../components/ListaPerguntas.vue';
+    import CampoArquivo from '../components/CampoArquivo.vue';
     //Importando instancia do axios (Centralizado no arquivo axiosInstance.js)
-    import axiosInstance from "../services/axiosInstance";
+    import axiosInstance, { sessao } from "../services/axiosInstance";
 
     export default {
         name: 'PerguntasQuizView',
         components: {
-            ListaPerguntas //A lista de perguntas usada na view
+            ListaPerguntas, //A lista de perguntas usada na view
+            CampoArquivo    //Campo de imagem/vídeo da pergunta
         },
         data() {
             return {
@@ -74,7 +84,10 @@
                     alternativa_c: "",
                     alternativa_d: "",
                     correta: "A",
+                    midia_tipo: "",
+                    midia_url: "",
                 },
+                enviando: false,
                 idEditando: null, //null = cadastrando uma pergunta nova; com valor = editando essa pergunta
                 mensagem: "",
                 erro: false
@@ -89,6 +102,10 @@
                 try{
                     const response = await axiosInstance.get(`/quizzes/${this.quizId}`); //Envia requisição GET
                     this.quiz = response.data;
+                    //Só o autor pode alterar as perguntas do quiz
+                    if (this.quiz.usuario_id !== sessao.usuario.id) {
+                        this.$router.push(`/quizzes/${this.quizId}/jogar`);
+                    }
                 } catch (error){
                     this.mostrarErro("Erro ao carregar quiz", error);
                 }
@@ -102,6 +119,7 @@
                 }
             },
             async salvarPergunta() { //Método chamado ao enviar os dados do formulário
+                this.enviando = true;
                 try{
                     if (this.idEditando) {
                         await axiosInstance.put(`/perguntas/${this.idEditando}`, this.pergunta); //Envia requisição PUT
@@ -116,6 +134,7 @@
                 } catch (error){
                     this.mostrarErro("Erro ao salvar pergunta", error);
                 }
+                this.enviando = false;
             }, //Fim salvarPergunta
             editarPergunta(pergunta) { //Chamado pelo evento "editar": copia a pergunta para o formulário
                 this.idEditando = pergunta.id;
@@ -126,6 +145,8 @@
                     alternativa_c: pergunta.alternativa_c,
                     alternativa_d: pergunta.alternativa_d,
                     correta: pergunta.correta,
+                    midia_tipo: pergunta.midia_tipo || "",
+                    midia_url: pergunta.midia_url || "",
                 };
                 this.mensagem = "";
             },
@@ -154,6 +175,8 @@
                     alternativa_c: "",
                     alternativa_d: "",
                     correta: "A",
+                    midia_tipo: "",
+                    midia_url: "",
                 };
             },
             mostrarErro(texto, error) {

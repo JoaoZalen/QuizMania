@@ -2,11 +2,15 @@
     <div class="jogar-quiz-view">
         <p class="categoria">{{ quiz.categoria }}</p>
         <h1>{{ quiz.titulo }}</h1>
+        <p class="autor" v-if="quiz.autor_nome">
+            <FotoUsuario :nome="quiz.autor_nome" :foto="quiz.autor_foto || ''" :tamanho="24" />
+            {{ quiz.autor_nome }}
+        </p>
 
         <!--Quiz sem perguntas-->
         <div v-if="carregado && listaDePerguntas.length === 0">
             <p class="vazio">Este quiz ainda não tem perguntas.</p>
-            <router-link :to="`/quizzes/${quizId}/perguntas`" class="btn btn-primario">Cadastrar perguntas</router-link>
+            <router-link v-if="sessao.usuario && sessao.usuario.id === quiz.usuario_id" :to="`/quizzes/${quizId}/perguntas`" class="btn btn-primario">Cadastrar perguntas</router-link>
         </div>
 
         <!--Tela de resultado-->
@@ -24,6 +28,9 @@
         <div v-else-if="perguntaAtual">
             <p class="subtitulo">Pergunta {{ indice + 1 }} de {{ listaDePerguntas.length }}</p>
             <h2>{{ perguntaAtual.enunciado }}</h2>
+            <!--Mídia da pergunta (imagem ou vídeo). O :key troca o vídeo ao mudar de pergunta-->
+            <video v-if="perguntaAtual.midia_tipo === 'video'" :key="perguntaAtual.id" class="midia" :src="urlArquivo(perguntaAtual.midia_url)" controls></video>
+            <img v-else-if="perguntaAtual.midia_tipo === 'imagem'" class="midia" :src="urlArquivo(perguntaAtual.midia_url)" alt="" />
 
             <div class="alternativas">
                 <button
@@ -54,12 +61,15 @@
 
 <script>
     //Importando instancia do axios (Centralizado no arquivo axiosInstance.js)
-    import axiosInstance from "../services/axiosInstance";
+    import axiosInstance, { sessao, urlArquivo } from "../services/axiosInstance";
+    import FotoUsuario from '../components/FotoUsuario.vue';
 
     export default {
         name: 'JogarQuizView',
+        components: { FotoUsuario },
         data() {
             return {
+                sessao, //Usuário logado (reativo)
                 quizId: this.$route.params.id, //ID do quiz que veio na URL
                 quiz: {},
                 listaDePerguntas: [],
@@ -91,6 +101,7 @@
             await this.getQuiz();
         },
         methods: {
+            urlArquivo,
             async getQuiz() { //Busca o quiz e as perguntas dele na API
                 try{
                     const responseQuiz = await axiosInstance.get(`/quizzes/${this.quizId}`); //Envia requisição GET
@@ -159,6 +170,10 @@
     }
 
     h1 {
+        margin-bottom: 8px;
+    }
+
+    .autor {
         margin-bottom: 24px;
     }
 

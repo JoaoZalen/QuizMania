@@ -1,11 +1,8 @@
 # QuizMania
 
-Site de quizzes de múltipla escolha. O repositório tem duas versões do projeto:
-
-- **Versão atual**: front-end em **Vue** consumindo uma **API em Node/Express** com banco **MySQL**
-  (pastas `quizmania-frontend` e `quizmania-backend-api`).
-- **Protótipo original**: front-end em JavaScript puro, sem back-end, com os dados no `localStorage`
-  (`index.html` e `src/` na raiz). Foi o ponto de partida e continua aqui como referência.
+Site de quizzes de múltipla escolha: front-end em **Vue** consumindo uma **API em Node/Express**
+com banco **MySQL** (pastas `quizmania-frontend` e `quizmania-backend-api`). Todos os dados
+(usuários, quizzes, perguntas, fotos e vídeos) ficam gravados no banco.
 
 A documentação completa da versão atual está em `contexto/Documentacao-QuizMania.pdf`
 (também em `.docx`): arquitetura, cada arquivo, o fluxo de uma requisição do Vue até o banco e os
@@ -17,7 +14,9 @@ Precisa de Node e do MySQL do XAMPP.
 
 1. Ligue o **MySQL** no XAMPP.
 2. Crie o banco: no phpMyAdmin, aba Importar, escolha `quizmania-backend-api/database/quizmania_db.sql`.
-   Ele cria o banco `quizmania_db`, as tabelas e 3 quizzes de exemplo.
+   Ele cria o banco `quizmania_db`, as tabelas e os dados iniciais: 20 usuários com 2 quizzes cada
+   (4 perguntas por quiz: 3 com imagem e 1 com vídeo, todos do Wikimedia Commons).
+   Login de qualquer usuário: e-mail `nome.sobrenome@quizmania.com` (ex.: `ana.ribeiro@quizmania.com`), senha `quizmania123`.
 3. Em um terminal, suba a API (porta 3000):
 
    ```
@@ -41,9 +40,16 @@ Usuário e senha do banco ficam em `quizmania-backend-api/.env` (padrão do XAMP
 
 ## O que a versão atual faz
 
-- Listar, cadastrar, editar e excluir quizzes.
-- Listar, cadastrar, editar e excluir as perguntas de cada quiz (4 alternativas, uma correta).
+- Criar conta, entrar, sair, editar a conta (nome, e-mail, senha e foto de perfil) e apagar a conta.
+- Cada quiz pertence a um usuário: só o autor edita ou exclui o quiz e as perguntas dele.
+- Listar, cadastrar, editar e excluir quizzes, com imagem do quiz.
+- Listar, cadastrar, editar e excluir as perguntas de cada quiz (4 alternativas, uma correta),
+  com imagem ou vídeo (arquivo enviado ou link).
 - Jogar um quiz: uma pergunta por vez, com o resultado no final.
+
+Fotos e vídeos enviados pelo computador são gravados em `quizmania-backend-api/uploads/` e o
+caminho fica salvo no banco. Senhas são guardadas com hash (scrypt) e o login gera um token
+enviado no cabeçalho `Authorization`.
 
 ## Estrutura
 
@@ -54,118 +60,46 @@ quizmania-backend-api/        API RESTful em Node + Express
   config/db.js                conexão (pool) com o MySQL
   middlewares/middlewares.js  json, helmet, compression, morgan, cors
   routes/routes.js            URLs da API
-  controllers/                QuizController.js e PerguntaController.js
-  models/                     Quiz.js e Pergunta.js (os comandos SQL)
-  utils/pathUtils.js
+  controllers/                UsuarioController.js, QuizController.js e PerguntaController.js
+  models/                     Usuario.js, Quiz.js e Pergunta.js (os comandos SQL)
+  utils/                      pathUtils.js, senha.js (hash e token), arquivos.js (uploads)
+  uploads/                    fotos e vídeos enviados
   database/quizmania_db.sql   criação do banco e dados de exemplo
 quizmania-frontend/           front em Vue 3 (Vue CLI)
   src/main.js, src/App.vue
   src/router/index.js         rotas das telas
-  src/services/axiosInstance.js   endereço da API
+  src/services/axiosInstance.js   endereço da API, usuário logado e token
   src/views/                  uma tela por arquivo
-  src/components/             ListaQuizzes, FormularioQuiz, ListaPerguntas
+  src/components/             ListaQuizzes, FormularioQuiz, ListaPerguntas, FormularioConta,
+                              CampoArquivo (imagem/vídeo), FotoUsuario
   src/assets/css/styles.css
 contexto/                     documentação do projeto (PDF e Word)
-index.html, src/              protótipo original (ver abaixo)
 ```
 
 ## Rotas da API
 
+Rotas marcadas com * exigem login (cabeçalho `Authorization: Bearer <token>`).
+
 | Método | URL | O que faz |
 |---|---|---|
+| POST | `/login` | Entra (devolve o usuário e o token) |
+| POST | `/logout` * | Sai (invalida o token) |
+| GET | `/usuarios` | Lista os usuários |
+| GET | `/usuarios/:id` | Busca um usuário |
+| GET | `/usuarios/:id/quizzes` | Lista os quizzes de um usuário |
+| POST | `/usuarios` | Cria conta |
+| PUT | `/usuarios/:id` * | Edita a própria conta |
+| DELETE | `/usuarios/:id` * | Apaga a própria conta e os quizzes dela |
 | GET | `/quizzes` | Lista os quizzes |
 | GET | `/quizzes/:id` | Busca um quiz |
-| POST | `/quizzes` | Cadastra um quiz |
-| PUT | `/quizzes/:id` | Atualiza um quiz |
-| DELETE | `/quizzes/:id` | Exclui um quiz e as perguntas dele |
+| POST | `/quizzes * | Cadastra um quiz |
+| PUT | `/quizzes/:id * | Atualiza um quiz |
+| DELETE | `/quizzes/:id * | Exclui um quiz e as perguntas dele |
 | GET | `/quizzes/:id/perguntas` | Lista as perguntas de um quiz |
-| POST | `/quizzes/:id/perguntas` | Cadastra uma pergunta no quiz |
+| POST | `/quizzes/:id/perguntas * | Cadastra uma pergunta no quiz |
 | GET | `/perguntas/:id` | Busca uma pergunta |
-| PUT | `/perguntas/:id` | Atualiza uma pergunta |
-| DELETE | `/perguntas/:id` | Exclui uma pergunta |
-
-## Protótipo original
-
-Site no estilo Quizur, só front-end, com os dados no `localStorage`. A estrutura já imitava a de um
-projeto Vue para facilitar a migração.
-
-### Como rodar o protótipo
-
-Precisa de um servidor (os arquivos usam `import`/`export`, que não funcionam abrindo o HTML direto):
-
-- XAMPP: ligue o Apache e abra a pasta do projeto, por exemplo `http://localhost/quizmania/`
-- Sem Apache: `python -m http.server 5180 --directory <pasta do projeto>` e abrir `http://localhost:5180`
-
-### Estrutura do protótipo
-
-```
-index.html                  só carrega o CSS e o src/main.js
-src/
-  main.js                   ponto de entrada
-  App.js                    layout (header/conteúdo/footer)
-  router/index.js           rotas
-  store/estado.js           estado compartilhado
-  services/
-    api.js                  todas as leituras/gravações de dados
-    storage.js              acesso ao localStorage (só o api.js usa)
-    seed.js                 cria os quizzes de exemplo
-  views/                    uma tela por arquivo
-    HomeView.js             /
-    EntrarView.js           /entrar  (e /entrar?cadastro)
-    CriarQuizView.js        /criar e /editar/:id
-    QuizView.js             /quiz/:id
-    PerfilView.js           /u/:usuario e /u/:usuario/historico
-    MeuPerfilView.js        /perfil (redireciona)
-    EditarPerfilView.js     /perfil/editar
-    NaoEncontradoView.js    404
-  components/               pedaços reutilizáveis
-    CabecalhoSite, RodapeSite, LogoMarca, CardQuiz, CarrosselDestaques,
-    ListaCategorias, RankingCriadores, BlocoCriarQuiz, CreditoFoto
-    criar/  EscolherTipoQuiz, EditorQuiz
-    quiz/   IntroQuiz, JogoQuiz, ResultadoQuiz
-  constants/categorias.js   categorias, letras e cores das respostas
-  utils/                    dom, formatar, imagens, icones
-  data/
-    exemplos.js             gera os ~100 quizzes e 24 autores de exemplo (nenhuma pergunta se repete)
-    tabelas.js              tabelas de dados reais que viram perguntas (capitais, elementos, datas…)
-    personalidade.js        banco de perguntas dos quizzes de personalidade
-    fotos.js                fotos de capa e de resultado (Wikimedia Commons, com autor e licença)
-    midias.js               fotos, vídeos e GIFs das perguntas (Wikimedia Commons)
-  assets/css/
-    main.css                importa os outros
-    base.css                variáveis, botões, campos
-    components/*.css        um por componente
-    views/*.css             um por tela
-```
-
-### Funcionalidades do protótipo
-
-- Dois tipos de quiz: **personalidade** ("qual herói você seria?", cada resposta conta ponto
-  para um resultado) e **certo ou errado** (nota no final).
-- Criador de quiz com capa, resultados com foto, 2 a 6 respostas por pergunta e mídia por
-  pergunta (imagem, GIF, YouTube ou vídeo).
-- Perfil público, edição de perfil (nome, bio, avatar com iniciais ou foto) e histórico.
-- Home com carrossel dos mais jogados, categorias, busca no header, filtro por tipo,
-  ordenação e paginação de 50 quizzes por página.
-- Tela do quiz em "modo foco": conteúdo no meio da tela e sem rodapé.
-- ~100 quizzes de exemplo de 24 autores, com quantidade de perguntas variada e
-  **nenhuma pergunta repetida entre quizzes**.
-
-### Mídia nas perguntas
-
-Cada pergunta pode ter `midia: { tipo, url }`:
-- `imagem` — arquivo enviado (reduzido) ou link
-- `gif` — arquivo enviado (mantido animado, até 2,5 MB) ou link `.gif` / Giphy / Tenor
-- `youtube` — link do YouTube (watch, youtu.be, shorts); `url` guarda só o ID do vídeo
-- `video` — link direto de vídeo (.mp4, .webm)
-
-Funções em `src/utils/midia.js`; campo do editor em `components/criar/CampoMidia.js`.
-
-### Fotos
-
-As capas vêm do Wikimedia Commons (licenças livres). O crédito de cada foto aparece
-na página do quiz, como a licença exige. Fotos enviadas por usuários ficam salvas no
-navegador (reduzidas para caber no `localStorage`).
+| PUT | `/perguntas/:id * | Atualiza uma pergunta |
+| DELETE | `/perguntas/:id * | Exclui uma pergunta |
 
 ## Contexto do projeto
 
@@ -208,9 +142,3 @@ a parte central (quizzes, perguntas e jogar) com os dados guardados no banco.
 8. Paginação de 50 por página, rodapé refeito, tela do quiz centralizada (modo foco).
 9. Mídia nas perguntas (imagem, GIF, YouTube, vídeo) e perguntas únicas em todos os quizzes.
 10. Versão em Vue com API em Node/Express e banco MySQL: CRUD de quizzes e de perguntas, e jogar.
-
-### O que o protótipo tem e a versão Vue ainda não
-- Contas de usuário, perfil e histórico.
-- Quiz de personalidade (a versão Vue só tem certo ou errado).
-- Capa, fotos de resultado e mídia nas perguntas.
-- Home com carrossel, busca, filtros e paginação.
