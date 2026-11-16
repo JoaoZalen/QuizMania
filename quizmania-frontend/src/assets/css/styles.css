@@ -1,0 +1,131 @@
+/* CSS global: reset, cores, botões, campos e mensagens usados em todas as telas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f7f6f3;
+    color: #141414;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.subtitulo {
+    color: #6f6f6f;
+    margin-bottom: 24px;
+}
+
+/* Botões */
+.btn {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 1px solid #d6d3cc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #141414;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    border-color: #141414;
+}
+
+.btn-primario {
+    background-color: #141414;
+    border-color: #141414;
+    color: #ffffff;
+}
+
+.btn-primario:hover {
+    background-color: #4f3cf0;
+    border-color: #4f3cf0;
+}
+
+.btn-perigo {
+    color: #c7302b;
+}
+
+.btn-perigo:hover {
+    border-color: #c7302b;
+}
+
+/* Formulários */
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 1px solid #e7e5e0;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #d6d3cc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-family: inherit;
+    font-size: 15px;
+    color: #141414;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #4f3cf0;
+    outline: none;
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Mensagens de sucesso e de erro */
+.mensagem {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background-color: #e6f4ec;
+    color: #17703d;
+    font-size: 14px;
+}
+
+.mensagem.erro {
+    background-color: #fdeceb;
+    color: #b3261e;
+}
+
+.vazio {
+    color: #6f6f6f;
+    padding: 24px 0;
+}
